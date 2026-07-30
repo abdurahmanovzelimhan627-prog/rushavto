@@ -323,12 +323,10 @@ body.nav-open{overflow:hidden}
 }
 .catalog-card img{aspect-ratio:4/3;object-fit:cover;width:100%}
 .catalog-card-body{padding:18px}
-.catalog-card-body-only{padding:28px 18px}
 .catalog-card b{display:block;font-size:1rem;margin-top:10px}
-.catalog-card > .catalog-card-body > span:not(.case-flag), .catalog-card-body-only > span{
+.catalog-card-body > span:not(.case-flag){
   display:block;color:var(--text-muted);font-size:.85rem;margin:4px 0 16px;
 }
-.catalog-card-placeholder{background:var(--bg-1);align-items:flex-start;justify-content:center}
 .catalog-note{margin-top:28px;color:var(--text-muted);font-size:.85rem}
 
 @media (max-width:720px){
