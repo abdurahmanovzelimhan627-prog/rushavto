@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0a09">
+<title>Каталог направлений — RUSHAUTO</title>
+<meta name="description" content="Каталог направлений RUSHAUTO: подбор автомобилей из Китая, Кореи, Европы и Дубая. Выберите страну — покажем актуальные примеры и оставите заявку.">
+<link rel="icon" href="assets/img/logo.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="route-progress" aria-hidden="true"><span id="routeFill"></span></div>
+
+<header class="site-header" id="siteHeader">
+  <div class="wrap header-inner">
+    <a href="index.html" class="brand">
+      <img src="assets/img/logo.png" alt="RUSHAUTO" class="brand-mark">
+      <span class="brand-text">RUSH<span class="accent-o">AUTO</span></span>
+    </a>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="index.html#directions">Направления</a>
+      <a href="catalog.html" aria-current="page">Каталог</a>
+      <a href="index.html#process">Как это работает</a>
+      <a href="index.html#cases">Кейсы</a>
+      <a href="index.html#quote">Расчёт</a>
+      <a href="index.html#faq">Вопросы</a>
+      <a href="index.html#contacts">Контакты</a>
+      <div class="nav-cta">
+        <a class="btn btn-solid btn-block" href="https://wa.me/79280899174?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D1%85%D0%BE%D1%87%D1%83%20%D0%BF%D0%BE%D0%B4%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D1%8C%20%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D1%8C" target="_blank" rel="noopener">Написать в WhatsApp</a>
+        <a class="btn btn-outline btn-block" href="tel:+79280899174">+7 928 089‑91‑74</a>
+      </div>
+    </nav>
+
+    <div class="header-cta">
+      <a class="btn btn-ghost phone-link" href="tel:+79280899174">+7 928 089‑91‑74</a>
+      <a class="btn btn-solid" href="https://wa.me/79280899174?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D1%85%D0%BE%D1%87%D1%83%20%D0%BF%D0%BE%D0%B4%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D1%8C%20%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D1%8C" target="_blank" rel="noopener">Написать в WhatsApp</a>
+    </div>
+
+    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- CATALOG HERO -->
+  <section class="section catalog-hero">
+    <div class="wrap">
+      <p class="section-eyebrow">Каталог</p>
+      <h1>Выберите направление</h1>
+      <p class="section-lede">Четыре страны, один процесс: заявка → поиск → экспертный осмотр → доставка. Отфильтруйте по стране или посмотрите все примеры сразу.</p>
+
+      <div class="filter-tabs" id="filterTabs" role="tablist" aria-label="Фильтр по стране">
+        <button class="filter-tab is-active" data-filter="all" role="tab" aria-selected="true">Все</button>
+        <button class="filter-tab" data-filter="china" role="tab" aria-selected="false">🇨🇳 Китай</button>
+        <button class="filter-tab" data-filter="korea" role="tab" aria-selected="false">🇰🇷 Корея</button>
+        <button class="filter-tab" data-filter="europe" role="tab" aria-selected="false">🇪🇺 Европа</button>
+        <button class="filter-tab" data-filter="dubai" role="tab" aria-selected="false">🇦🇪 Дубай</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATALOG GRID -->
+  <section class="section section-dark catalog-grid-section">
+    <div class="wrap">
+      <div class="grid grid-3 catalog-grid" id="catalogGrid">
+
+        <div class="catalog-card" data-country="europe">
+          <img src="assets/img/case1.jpg" alt="Mercedes-Benz G63 2026" loading="lazy">
+          <div class="catalog-card-body">
+            <span class="case-flag">🇪🇺</span>
+            <b>Mercedes‑Benz G63‑2026</b>
+            <span>Европа · доступен к заказу</span>
+            <a class="btn btn-outline btn-block catalog-cta" href="https://wa.me/79280899174?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20Mercedes-Benz%20G63-2026%20(%D0%95%D0%B2%D1%80%D0%BE%D0%BF%D0%B0)" target="_blank" rel="noopener">Спросить про этот авто</a>
+          </div>
+        </div>
+
+        <div class="catalog-card" data-country="korea">
+          <img src="assets/img/case5.jpg" alt="Hyundai Palisade" loading="lazy">
+          <div class="catalog-card-body">
+            <span class="case-flag">🇰🇷</span>
+            <b>Hyundai Palisade</b>
+            <span>Корея · пример подбора</span>
+            <a class="btn btn-outline btn-block catalog-cta" href="https://wa.me/79280899174?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20Hyundai%20Palisade%20(%D0%9A%D0%BE%D1%80%D0%B5%D1%8F)" target="_blank" rel="noopener">Спросить про этот авто</a>
+          </div>
+        </div>
+
+        <div class="catalog-card" data-country="china">
+          <img src="assets/img/case2.jpg" alt="Премиальный SUV" loading="lazy">
+          <div class="catalog-card-body">
+            <span class="case-flag">🇨🇳</span>
+            <b>Премиальный SUV</b>
+            <span>Китай · пример подбора</span>
+            <a class="btn btn-outline btn-block catalog-cta" href="https://wa.me/79280899174?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D0%BF%D1%80%D0%B5%D0%BC%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20SUV%20(%D0%9A%D0%B8%D1%82%D0%B0%D0%B9)" target="_blank" rel="noopener">Спросить про этот авто</a>
+          </div>
+        </div>
+
+        <div class="catalog-card" data-country="china">
+          <img src="assets/img/case3.jpg" alt="Премиальный кроссовер" loading="lazy">
+          <div class="catalog-card-body">
+            <span class="case-flag">🇨🇳</span>
+            <b>Премиальный кроссовер</b>
+            <span>Китай · пример подбора</span>
+            <a class="btn btn-outline btn-block catalog-cta" href="https://wa.me/79280899174?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D0%BF%D1%80%D0%B5%D0%BC%D0%B8%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9%20%D0%BA%D1%80%D0%BE%D1%81%D1%81%D0%BE%D0%B2%D0%B5%D1%80%20(%D0%9A%D0%B8%D1%82%D0%B0%D0%B9)" target="_blank" rel="noopener">Спросить про этот авто</a>
+          </div>
+        </div>
+
+        <div class="catalog-card" data-country="china">
+          <img src="assets/img/case4.jpg" alt="Бизнес-кроссовер" loading="lazy">
+          <div class="catalog-card-body">
+            <span class="case-flag">🇨🇳</span>
+            <b>Бизнес‑кроссовер</b>
+            <span>Китай · пример подбора</span>
+            <a class="btn btn-outline btn-block catalog-cta" href="https://wa.me/79280899174?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D0%B1%D0%B8%D0%B7%D0%BD%D0%B5%D1%81-%D0%BA%D1%80%D0%BE%D1%81%D1%81%D0%BE%D0%B2%D0%B5%D1%80%20(%D0%9A%D0%B8%D1%82%D0%B0%D0%B9)" target="_blank" rel="noopener">Спросить про этот авто</a>
+          </div>
+        </div>
+
+        <div class="catalog-card" data-country="china">
+          <img src="assets/img/case6.jpg" alt="Электрокроссовер" loading="lazy">
+          <div class="catalog-card-body">
+            <span class="case-flag">🇨🇳</span>
+            <b>Электрокроссовер</b>
+            <span>Китай · пример подбора</span>
+            <a class="btn btn-outline btn-block catalog-cta" href="https://wa.me/79280899174?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%98%D0%BD%D1%82%D0%B5%D1%80%D0%B5%D1%81%D1%83%D0%B5%D1%82%20%D1%8D%D0%BB%D0%B5%D0%BA%D1%82%D1%80%D0%BE%D0%BA%D1%80%D0%BE%D1%81%D1%81%D0%BE%D0%B2%D0%B5%D1%80%20(%D0%9A%D0%B8%D1%82%D0%B0%D0%B9)" target="_blank" rel="noopener">Спросить про этот авто</a>
+          </div>
+        </div>
+
+        <div class="catalog-card catalog-card-placeholder" data-country="dubai">
+          <div class="catalog-card-body catalog-card-body-only">
+            <span class="case-flag">🇦🇪</span>
+            <b>Дубай</b>
+            <span>Фотопримеров пока нет — актуальные предложения меняются каждую неделю. Уточните у менеджера под ваш запрос (марка, бюджет, комплектация).</span>
+            <a class="btn btn-solid btn-block catalog-cta" href="https://wa.me/79280899174?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BF%D0%BE%D0%B4%D0%BE%D0%B1%D1%80%D0%B0%D1%82%D1%8C%20%D0%B0%D0%B2%D1%82%D0%BE%20%D0%B8%D0%B7%20%D0%94%D1%83%D0%B1%D0%B0%D1%8F" target="_blank" rel="noopener">Оставить заявку</a>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="catalog-note">Показаны подтверждённые примеры и открытые направления. Полный подбор под ваш запрос — через заявку менеджеру Мухаммаду.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>© <span id="year"></span> RUSHAUTO. Подбор и доставка автомобилей из Китая, Кореи, Европы и Дубая.</span>
+    <a href="index.html#top">На главную ↑</a>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script>
+  const tabs = document.querySelectorAll('.filter-tab');
+  const cards = document.querySelectorAll('.catalog-card');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => { t.classList.remove('is-active'); t.setAttribute('aria-selected', 'false'); });
+      tab.classList.add('is-active');
+      tab.setAttribute('aria-selected', 'true');
+      const filter = tab.dataset.filter;
+      cards.forEach(card => {
+        const match = filter === 'all' || card.dataset.country === filter;
+        card.style.display = match ? '' : 'none';
+      });
+    });
+  });
+</script>
+</body>
+</html>
