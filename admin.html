@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Заявки — RUSHAUTO</title>
+<style>
+  :root{color-scheme:light dark;--bg:#0b0a09;--panel:#17140f;--text:#f3ede4;--muted:#a89c8a;--rule:#2c271f;--accent:#e8a33d}
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);padding:24px}
+  h1{font-size:20px;margin:0 0 16px}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+  input[type=password],input[type=text]{background:var(--panel);border:1px solid var(--rule);color:var(--text);padding:8px 10px;border-radius:6px;font:inherit;min-width:260px}
+  button{background:var(--accent);border:none;color:#1a1408;padding:8px 14px;border-radius:6px;font:inherit;font-weight:600;cursor:pointer}
+  button:hover{opacity:.9}
+  .status{color:var(--muted);font-size:13px}
+  table{width:100%;border-collapse:collapse;background:var(--panel);border-radius:8px;overflow:hidden}
+  th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--rule);font-size:14px;white-space:nowrap}
+  th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.03em}
+  tr:last-child td{border-bottom:none}
+  .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+  .badge-ok{background:#1e3a24;color:#7fd68f}
+  .badge-fail{background:#3a1e1e;color:#e08a8a}
+  .empty{color:var(--muted);padding:24px;text-align:center}
+  .wrap-scroll{overflow-x:auto}
+</style>
+</head>
+<body>
+
+<h1>Заявки RUSHAUTO</h1>
+
+<div class="toolbar">
+  <input type="password" id="token" placeholder="Токен доступа (ADMIN_TOKEN)">
+  <button id="load">Показать</button>
+  <button id="refresh" style="display:none">Обновить</button>
+  <span class="status" id="status"></span>
+</div>
+
+<div class="wrap-scroll">
+  <table id="table" style="display:none">
+    <thead>
+      <tr>
+        <th>Дата</th>
+        <th>Имя</th>
+        <th>Телефон</th>
+        <th>Направление</th>
+        <th>Модель</th>
+        <th>Бюджет</th>
+        <th>Источник</th>
+        <th>Telegram</th>
+        <th>WhatsApp</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<script>
+const tokenInput = document.getElementById('token');
+const statusEl = document.getElementById('status');
+const table = document.getElementById('table');
+const tbody = document.getElementById('tbody');
+const loadBtn = document.getElementById('load');
+const refreshBtn = document.getElementById('refresh');
+
+const params = new URLSearchParams(location.search);
+const urlToken = params.get('token');
+const savedToken = urlToken || localStorage.getItem('rushauto_admin_token') || '';
+tokenInput.value = savedToken;
+
+function waLink(phone) {
+  const digits = (phone || '').replace(/[^\d]/g, '');
+  if (!digits) return '';
+  return 'https://wa.me/' + digits;
+}
+
+async function loadLeads() {
+  const token = tokenInput.value.trim();
+  if (!token) {
+    statusEl.textContent = 'Введите токен';
+    return;
+  }
+  localStorage.setItem('rushauto_admin_token', token);
+  statusEl.textContent = 'Загрузка...';
+  try {
+    const res = await fetch('/api/leads?token=' + encodeURIComponent(token));
+    const data = await res.json();
+    if (!data.ok) {
+      statusEl.textContent = 'Ошибка: ' + (data.error || 'доступ запрещён');
+      table.style.display = 'none';
+      return;
+    }
+    renderLeads(data.leads);
+    statusEl.textContent = data.leads.length + ' заявок · обновлено ' + new Date().toLocaleTimeString('ru-RU');
+    table.style.display = data.leads.length ? '' : 'none';
+    refreshBtn.style.display = '';
+  } catch (err) {
+    statusEl.textContent = 'Сервер недоступен';
+  }
+}
+
+function renderLeads(leads) {
+  tbody.innerHTML = '';
+  leads.forEach((lead) => {
+    const tr = document.createElement('tr');
+    const wa = waLink(lead.phone);
+    tr.innerHTML = `
+      <td>${lead.created_at || ''}</td>
+      <td>${lead.name || ''}</td>
+      <td>${lead.phone || ''}</td>
+      <td>${lead.country || ''}</td>
+      <td>${lead.model || ''}</td>
+      <td>${lead.budget || ''}</td>
+      <td>${lead.source || ''}</td>
+      <td><span class="badge ${lead.telegram_ok ? 'badge-ok' : 'badge-fail'}">${lead.telegram_ok ? 'доставлено' : 'ошибка'}</span></td>
+      <td>${wa ? `<a href="${wa}" target="_blank" rel="noopener">Написать</a>` : ''}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+loadBtn.addEventListener('click', loadLeads);
+refreshBtn.addEventListener('click', loadLeads);
+tokenInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') loadLeads(); });
+
+if (savedToken) loadLeads();
+</script>
+</body>
+</html>
