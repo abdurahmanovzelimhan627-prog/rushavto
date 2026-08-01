@@ -45,21 +45,38 @@ const io = new IntersectionObserver((entries) => {
 
 revealTargets.forEach(el => io.observe(el));
 
-// Quote form -> WhatsApp with prefilled message
+// Quote form -> Telegram (backend)
 const quoteForm = document.getElementById('quoteForm');
-quoteForm.addEventListener('submit', (e) => {
+const qSubmit = document.getElementById('qSubmit');
+const qStatus = document.getElementById('qStatus');
+
+quoteForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const country = document.getElementById('qCountry').value;
   const model = document.getElementById('qModel').value.trim();
   const budget = document.getElementById('qBudget').value.trim();
   const name = document.getElementById('qName').value.trim();
+  const phone = document.getElementById('qPhone').value.trim();
 
-  let lines = ['Здравствуйте! Хочу подобрать автомобиль.'];
-  lines.push('Направление: ' + country);
-  if (model) lines.push('Марка/модель: ' + model);
-  if (budget) lines.push('Бюджет: ' + budget);
-  if (name) lines.push('Меня зовут: ' + name);
+  qSubmit.disabled = true;
+  qStatus.textContent = 'Отправляем заявку...';
 
-  const text = encodeURIComponent(lines.join('\n'));
-  window.open('https://wa.me/79280899174?text=' + text, '_blank', 'noopener');
+  try {
+    const res = await fetch('/api/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ country, model, budget, name, phone, source: 'quote-form' }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      qStatus.textContent = 'Заявка отправлена менеджеру. Мы скоро свяжемся с вами.';
+      quoteForm.reset();
+    } else {
+      qStatus.textContent = 'Не получилось отправить заявку (' + (data.error || 'сервер недоступен') + '). Попробуйте ещё раз или напишите нам в WhatsApp.';
+    }
+  } catch (err) {
+    qStatus.textContent = 'Сервер недоступен. Попробуйте ещё раз или напишите нам в WhatsApp.';
+  } finally {
+    qSubmit.disabled = false;
+  }
 });

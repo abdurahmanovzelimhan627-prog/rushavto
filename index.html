@@ -223,8 +223,11 @@
         <label>Как к вам обращаться
           <input type="text" name="name" id="qName" placeholder="Ваше имя">
         </label>
-        <button type="submit" class="btn btn-solid btn-lg btn-block">Написать в WhatsApp</button>
-        <p class="quote-hint">Кнопка откроет WhatsApp с готовым сообщением менеджеру — останется нажать «отправить».</p>
+        <label>Телефон для связи
+          <input type="tel" name="phone" id="qPhone" placeholder="+7 ...">
+        </label>
+        <button type="submit" class="btn btn-solid btn-lg btn-block" id="qSubmit">Отправить заявку</button>
+        <p class="quote-hint" id="qStatus">Заявка уйдёт менеджеру в Telegram.</p>
       </form>
     </div>
   </section>
