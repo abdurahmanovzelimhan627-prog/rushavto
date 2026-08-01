@@ -3,3 +3,5 @@
 assets/Снимок экрана*.png
 .env
 leads.db
+node_modules
+.vercel
