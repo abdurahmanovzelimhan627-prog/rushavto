@@ -13,11 +13,18 @@ if (!connectionString) {
   throw new Error('Не найдена строка подключения к Postgres (POSTGRES_URL / POSTGRES_URL_*)');
 }
 
-try {
-  const u = new URL(connectionString);
-  console.log('[db] using host:', u.hostname, 'db:', u.pathname);
-} catch (e) {
-  console.log('[db] connectionString не парсится как URL:', e.message);
+for (const [name, val] of Object.entries({
+  POSTGRES_URL_POSTGRES_URL: process.env.POSTGRES_URL_POSTGRES_URL,
+  POSTGRES_URL_DATABASE_URL: process.env.POSTGRES_URL_DATABASE_URL,
+  POSTGRES_URL_PRISMA_DATABASE_URL: process.env.POSTGRES_URL_PRISMA_DATABASE_URL,
+})) {
+  if (!val) { console.log('[db]', name, '= (не задана)'); continue; }
+  try {
+    const u = new URL(val);
+    console.log('[db]', name, '-> protocol:', u.protocol, 'host:', u.hostname);
+  } catch (e) {
+    console.log('[db]', name, '-> не парсится как URL:', e.message);
+  }
 }
 
 const sql = neon(connectionString);
