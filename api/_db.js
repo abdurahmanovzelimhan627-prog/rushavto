@@ -1,3 +1,9 @@
+// Интеграция Neon на Vercel создаёт переменную с префиксом (POSTGRES_URL_POSTGRES_URL),
+// а не голый POSTGRES_URL, который по умолчанию ищет @vercel/postgres.
+if (!process.env.POSTGRES_URL && process.env.POSTGRES_URL_POSTGRES_URL) {
+  process.env.POSTGRES_URL = process.env.POSTGRES_URL_POSTGRES_URL;
+}
+
 const { sql } = require('@vercel/postgres');
 
 let initialized = false;
