@@ -13,6 +13,13 @@ if (!connectionString) {
   throw new Error('Не найдена строка подключения к Postgres (POSTGRES_URL / POSTGRES_URL_*)');
 }
 
+try {
+  const u = new URL(connectionString);
+  console.log('[db] using host:', u.hostname, 'db:', u.pathname);
+} catch (e) {
+  console.log('[db] connectionString не парсится как URL:', e.message);
+}
+
 const sql = neon(connectionString);
 
 let initialized = false;
