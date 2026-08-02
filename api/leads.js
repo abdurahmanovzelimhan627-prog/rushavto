@@ -14,6 +14,6 @@ module.exports = async (req, res) => {
   }
 
   await ensureSchema();
-  const result = await sql`SELECT * FROM leads ORDER BY id DESC`;
-  res.status(200).json({ ok: true, leads: result.rows });
+  const rows = await sql`SELECT * FROM leads ORDER BY id DESC`;
+  res.status(200).json({ ok: true, leads: rows });
 };

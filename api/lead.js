@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
       VALUES (${name}, ${phone}, ${country}, ${model}, ${budget}, ${source}, false)
       RETURNING id
     `;
-    leadId = inserted.rows[0].id;
+    leadId = inserted[0].id;
   } catch (err) {
     console.error('Не удалось сохранить заявку в БД:', err);
     res.status(500).json({ ok: false, error: 'не удалось сохранить заявку' });

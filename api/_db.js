@@ -1,11 +1,16 @@
-// Интеграция Neon на Vercel создаёт переменные с префиксом, а не голый POSTGRES_URL,
-// который по умолчанию ищет @vercel/postgres. POSTGRES_URL_POSTGRES_URL — прямое
-// (non-pooled) подключение, для serverless-функций нужен пул — берём DATABASE_URL.
-if (!process.env.POSTGRES_URL && process.env.POSTGRES_URL_DATABASE_URL) {
-  process.env.POSTGRES_URL = process.env.POSTGRES_URL_DATABASE_URL;
+const { neon } = require('@neondatabase/serverless');
+
+const connectionString =
+  process.env.POSTGRES_URL ||
+  process.env.POSTGRES_URL_DATABASE_URL ||
+  process.env.POSTGRES_URL_POSTGRES_URL ||
+  process.env.POSTGRES_URL_PRISMA_DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error('Не найдена строка подключения к Postgres (POSTGRES_URL / POSTGRES_URL_*)');
 }
 
-const { sql } = require('@vercel/postgres');
+const sql = neon(connectionString);
 
 let initialized = false;
 
