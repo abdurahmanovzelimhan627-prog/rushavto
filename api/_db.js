@@ -1,9 +1,12 @@
 const { neon } = require('@neondatabase/serverless');
 
+// POSTGRES_URL_DATABASE_URL от интеграции Neon/Vercel ведёт на Prisma-прокси
+// (404 resource-not-found для HTTP-драйвера Neon), поэтому берём "прямой"
+// POSTGRES_URL_POSTGRES_URL первым — для HTTP-драйвера pooled/direct не важно.
 const connectionString =
   process.env.POSTGRES_URL ||
-  process.env.POSTGRES_URL_DATABASE_URL ||
   process.env.POSTGRES_URL_POSTGRES_URL ||
+  process.env.POSTGRES_URL_DATABASE_URL ||
   process.env.POSTGRES_URL_PRISMA_DATABASE_URL;
 
 if (!connectionString) {
