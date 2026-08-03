@@ -1,4 +1,4 @@
-const { sql, ensureSchema } = require('./_db');
+const { pool, ensureSchema } = require('./_db');
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {
@@ -14,6 +14,6 @@ module.exports = async (req, res) => {
   }
 
   await ensureSchema();
-  const rows = await sql`SELECT * FROM leads ORDER BY id DESC`;
-  res.status(200).json({ ok: true, leads: rows });
+  const result = await pool.query('SELECT * FROM leads ORDER BY id DESC');
+  res.status(200).json({ ok: true, leads: result.rows });
 };

@@ -1,4 +1,4 @@
-const { sql, ensureSchema } = require('./_db');
+const { pool, ensureSchema } = require('./_db');
 
 async function sendToTelegram(text) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -38,12 +38,13 @@ module.exports = async (req, res) => {
 
   let leadId;
   try {
-    const inserted = await sql`
-      INSERT INTO leads (name, phone, country, model, budget, source, telegram_ok)
-      VALUES (${name}, ${phone}, ${country}, ${model}, ${budget}, ${source}, false)
-      RETURNING id
-    `;
-    leadId = inserted[0].id;
+    const inserted = await pool.query(
+      `INSERT INTO leads (name, phone, country, model, budget, source, telegram_ok)
+       VALUES ($1, $2, $3, $4, $5, $6, false)
+       RETURNING id`,
+      [name, phone, country, model, budget, source]
+    );
+    leadId = inserted.rows[0].id;
   } catch (err) {
     console.error('Не удалось сохранить заявку в БД:', err);
     res.status(500).json({ ok: false, error: 'не удалось сохранить заявку' });
@@ -66,7 +67,7 @@ module.exports = async (req, res) => {
 
   const tg = await sendToTelegram(lines.join('\n'));
   if (tg.ok) {
-    await sql`UPDATE leads SET telegram_ok = true WHERE id = ${leadId}`;
+    await pool.query('UPDATE leads SET telegram_ok = true WHERE id = $1', [leadId]);
   } else {
     console.error('Telegram send failed (заявка всё равно сохранена в БД):', tg.error);
   }
