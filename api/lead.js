@@ -1,10 +1,8 @@
 const { pool, ensureSchema } = require('./_db');
 
-async function sendToTelegram(text) {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
+async function sendViaBot(token, chatId, text) {
   if (!token || !chatId) {
-    return { ok: false, error: 'TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не заданы' };
+    return { ok: false, error: 'токен или chat_id не заданы' };
   }
   try {
     const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
@@ -18,6 +16,16 @@ async function sendToTelegram(text) {
   } catch (err) {
     return { ok: false, error: String(err) };
   }
+}
+
+async function sendToTelegram(text) {
+  const results = await Promise.all([
+    sendViaBot(process.env.TELEGRAM_BOT_TOKEN, process.env.TELEGRAM_CHAT_ID, text),
+    sendViaBot(process.env.TELEGRAM_BOT_TOKEN_2, process.env.TELEGRAM_CHAT_ID_2, text),
+  ]);
+  const errors = results.filter((r) => !r.ok).map((r) => r.error);
+  // Успех, если доставлено хотя бы одному получателю.
+  return { ok: results.some((r) => r.ok), error: errors.join('; ') };
 }
 
 module.exports = async (req, res) => {

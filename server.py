@@ -98,12 +98,9 @@ def fetch_leads():
     return [dict(row) for row in rows]
 
 
-def send_to_telegram(text):
-    env = load_env()
-    token = env.get("TELEGRAM_BOT_TOKEN")
-    chat_id = env.get("TELEGRAM_CHAT_ID")
+def send_via_bot(token, chat_id, text):
     if not token or not chat_id:
-        return False, "TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не заполнены в .env"
+        return False, "токен или chat_id не заданы"
 
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     payload = json.dumps({"chat_id": chat_id, "text": text}).encode("utf-8")
@@ -124,6 +121,17 @@ def send_to_telegram(text):
             return False, str(e)
     except Exception as e:
         return False, str(e)
+
+
+def send_to_telegram(text):
+    env = load_env()
+    results = [
+        send_via_bot(env.get("TELEGRAM_BOT_TOKEN"), env.get("TELEGRAM_CHAT_ID"), text),
+        send_via_bot(env.get("TELEGRAM_BOT_TOKEN_2"), env.get("TELEGRAM_CHAT_ID_2"), text),
+    ]
+    errors = [err for ok, err in results if not ok]
+    # Успех, если доставлено хотя бы одному получателю.
+    return any(ok for ok, _ in results), "; ".join(errors)
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
