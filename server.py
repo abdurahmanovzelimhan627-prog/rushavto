@@ -13,6 +13,9 @@ DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 ENV_PATH = os.path.join(DIRECTORY, ".env")
 DB_PATH = os.path.join(DIRECTORY, "leads.db")
 
+RATE_LIMIT_WINDOW_MINUTES = 10
+RATE_LIMIT_MAX_PER_WINDOW = 3
+
 
 def load_env():
     env = {}
@@ -57,24 +60,38 @@ def init_db():
             interior_color TEXT,
             budget TEXT,
             source TEXT,
+            ip TEXT,
             telegram_ok INTEGER NOT NULL DEFAULT 0
         )
         """
     )
     existing_cols = {row[1] for row in conn.execute("PRAGMA table_info(leads)")}
-    for col in ("body_type", "year", "exterior_color", "interior_color"):
+    for col in ("body_type", "year", "exterior_color", "interior_color", "ip"):
         if col not in existing_cols:
             conn.execute(f"ALTER TABLE leads ADD COLUMN {col} TEXT")
     conn.commit()
     conn.close()
 
 
-def save_lead(data):
+def recent_leads_count(ip):
+    conn = sqlite3.connect(DB_PATH)
+    row = conn.execute(
+        f"""
+        SELECT COUNT(*) FROM leads
+        WHERE ip = ? AND created_at > datetime('now', '-{RATE_LIMIT_WINDOW_MINUTES} minutes')
+        """,
+        (ip,),
+    ).fetchone()
+    conn.close()
+    return row[0]
+
+
+def save_lead(data, ip):
     conn = sqlite3.connect(DB_PATH)
     cur = conn.execute(
         """
-        INSERT INTO leads (created_at, name, phone, country, model, body_type, year, exterior_color, interior_color, budget, source, telegram_ok)
-        VALUES (datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
+        INSERT INTO leads (created_at, name, phone, country, model, body_type, year, exterior_color, interior_color, budget, source, ip, telegram_ok)
+        VALUES (datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
         """,
         (
             str(data.get("name", "")).strip(),
@@ -87,6 +104,7 @@ def save_lead(data):
             str(data.get("interiorColor", "")).strip(),
             str(data.get("budget", "")).strip(),
             str(data.get("source", "")).strip(),
+            ip,
         ),
     )
     lead_id = cur.lastrowid
@@ -178,8 +196,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self._send_json(400, {"ok": False, "error": "bad json"})
             return
 
+        # Honeypot: скрытое поле, которое заполняют только боты.
+        if str(data.get("website", "")).strip():
+            self._send_json(200, {"ok": True})
+            return
+
+        ip = self.client_address[0]
+        if recent_leads_count(ip) >= RATE_LIMIT_MAX_PER_WINDOW:
+            self._send_json(429, {"ok": False, "error": "Слишком много заявок подряд. Попробуйте позже или напишите в WhatsApp."})
+            return
+
         try:
-            lead_id = save_lead(data)
+            lead_id = save_lead(data, ip)
         except Exception as e:
             print("Не удалось сохранить заявку в БД:", e)
             self._send_json(500, {"ok": False, "error": "не удалось сохранить заявку"})

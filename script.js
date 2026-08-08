@@ -52,6 +52,7 @@ const qStatus = document.getElementById('qStatus');
 
 quoteForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+  const website = document.getElementById('qWebsite').value;
   const country = document.getElementById('qCountry').value;
   const model = document.getElementById('qModel').value.trim();
   const bodyType = document.getElementById('qBodyType').value;
@@ -69,7 +70,7 @@ quoteForm.addEventListener('submit', async (e) => {
     const res = await fetch('/api/lead', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ country, model, bodyType, year, exteriorColor, interiorColor, budget, name, phone, source: 'quote-form' }),
+      body: JSON.stringify({ website, country, model, bodyType, year, exteriorColor, interiorColor, budget, name, phone, source: 'quote-form' }),
     });
     const data = await res.json();
     if (data.ok) {

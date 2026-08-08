@@ -22,6 +22,15 @@ async function sendToTelegram(text) {
   return sendViaBot(process.env.TELEGRAM_BOT_TOKEN_2, process.env.TELEGRAM_CHAT_ID_2, text);
 }
 
+const RATE_LIMIT_WINDOW_MINUTES = 10;
+const RATE_LIMIT_MAX_PER_WINDOW = 3;
+
+function getClientIp(req) {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (forwarded) return String(forwarded).split(',')[0].trim();
+  return req.socket && req.socket.remoteAddress ? req.socket.remoteAddress : '';
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ ok: false, error: 'method not allowed' });
@@ -29,6 +38,15 @@ module.exports = async (req, res) => {
   }
 
   const data = req.body || {};
+
+  // Honeypot: скрытое поле, которое обычные пользователи не видят и не
+  // заполняют, а простые спам-боты — заполняют. Тихо "принимаем" заявку,
+  // чтобы бот не понял, что его отфильтровали.
+  if (String(data.website || '').trim()) {
+    res.status(200).json({ ok: true });
+    return;
+  }
+
   const name = String(data.name || '').trim();
   const phone = String(data.phone || '').trim();
   const country = String(data.country || '').trim();
@@ -39,16 +57,28 @@ module.exports = async (req, res) => {
   const interiorColor = String(data.interiorColor || '').trim();
   const budget = String(data.budget || '').trim();
   const source = String(data.source || '').trim();
+  const ip = getClientIp(req);
 
   await ensureSchema();
+
+  if (ip) {
+    const recent = await pool.query(
+      `SELECT COUNT(*) FROM leads WHERE ip = $1 AND created_at > now() - interval '${RATE_LIMIT_WINDOW_MINUTES} minutes'`,
+      [ip]
+    );
+    if (Number(recent.rows[0].count) >= RATE_LIMIT_MAX_PER_WINDOW) {
+      res.status(429).json({ ok: false, error: 'Слишком много заявок подряд. Попробуйте позже или напишите в WhatsApp.' });
+      return;
+    }
+  }
 
   let leadId;
   try {
     const inserted = await pool.query(
-      `INSERT INTO leads (name, phone, country, model, body_type, year, exterior_color, interior_color, budget, source, telegram_ok)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, false)
+      `INSERT INTO leads (name, phone, country, model, body_type, year, exterior_color, interior_color, budget, source, ip, telegram_ok)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, false)
        RETURNING id`,
-      [name, phone, country, model, bodyType, year, exteriorColor, interiorColor, budget, source]
+      [name, phone, country, model, bodyType, year, exteriorColor, interiorColor, budget, source, ip]
     );
     leadId = inserted.rows[0].id;
   } catch (err) {

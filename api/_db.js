@@ -40,7 +40,8 @@ async function ensureSchema() {
       ADD COLUMN IF NOT EXISTS body_type TEXT,
       ADD COLUMN IF NOT EXISTS year TEXT,
       ADD COLUMN IF NOT EXISTS exterior_color TEXT,
-      ADD COLUMN IF NOT EXISTS interior_color TEXT
+      ADD COLUMN IF NOT EXISTS interior_color TEXT,
+      ADD COLUMN IF NOT EXISTS ip TEXT
   `);
   initialized = true;
 }
