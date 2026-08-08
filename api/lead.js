@@ -33,6 +33,10 @@ module.exports = async (req, res) => {
   const phone = String(data.phone || '').trim();
   const country = String(data.country || '').trim();
   const model = String(data.model || '').trim();
+  const bodyType = String(data.bodyType || '').trim();
+  const year = String(data.year || '').trim();
+  const exteriorColor = String(data.exteriorColor || '').trim();
+  const interiorColor = String(data.interiorColor || '').trim();
   const budget = String(data.budget || '').trim();
   const source = String(data.source || '').trim();
 
@@ -41,10 +45,10 @@ module.exports = async (req, res) => {
   let leadId;
   try {
     const inserted = await pool.query(
-      `INSERT INTO leads (name, phone, country, model, budget, source, telegram_ok)
-       VALUES ($1, $2, $3, $4, $5, $6, false)
+      `INSERT INTO leads (name, phone, country, model, body_type, year, exterior_color, interior_color, budget, source, telegram_ok)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, false)
        RETURNING id`,
-      [name, phone, country, model, budget, source]
+      [name, phone, country, model, bodyType, year, exteriorColor, interiorColor, budget, source]
     );
     leadId = inserted.rows[0].id;
   } catch (err) {
@@ -58,12 +62,16 @@ module.exports = async (req, res) => {
     ['name', 'Имя'],
     ['country', 'Направление'],
     ['model', 'Марка/модель'],
+    ['bodyType', 'Тип кузова'],
+    ['year', 'Год выпуска'],
+    ['exteriorColor', 'Цвет кузова'],
+    ['interiorColor', 'Цвет салона'],
     ['budget', 'Бюджет'],
     ['phone', 'Телефон'],
     ['source', 'Источник'],
   ];
   for (const [key, label] of fieldLabels) {
-    const value = { name, country, model, budget, phone, source }[key];
+    const value = { name, country, model, bodyType, year, exteriorColor, interiorColor, budget, phone, source }[key];
     if (value) lines.push(`${label}: ${value}`);
   }
 

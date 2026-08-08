@@ -46,6 +46,10 @@
         <th>Телефон</th>
         <th>Направление</th>
         <th>Модель</th>
+        <th>Кузов</th>
+        <th>Год</th>
+        <th>Цвет кузова</th>
+        <th>Цвет салона</th>
         <th>Бюджет</th>
         <th>Источник</th>
         <th>Telegram</th>
@@ -111,6 +115,10 @@ function renderLeads(leads) {
       <td>${lead.phone || ''}</td>
       <td>${lead.country || ''}</td>
       <td>${lead.model || ''}</td>
+      <td>${lead.body_type || ''}</td>
+      <td>${lead.year || ''}</td>
+      <td>${lead.exterior_color || ''}</td>
+      <td>${lead.interior_color || ''}</td>
       <td>${lead.budget || ''}</td>
       <td>${lead.source || ''}</td>
       <td><span class="badge ${lead.telegram_ok ? 'badge-ok' : 'badge-fail'}">${lead.telegram_ok ? 'доставлено' : 'ошибка'}</span></td>

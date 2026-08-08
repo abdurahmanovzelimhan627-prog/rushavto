@@ -51,12 +51,20 @@ def init_db():
             phone TEXT,
             country TEXT,
             model TEXT,
+            body_type TEXT,
+            year TEXT,
+            exterior_color TEXT,
+            interior_color TEXT,
             budget TEXT,
             source TEXT,
             telegram_ok INTEGER NOT NULL DEFAULT 0
         )
         """
     )
+    existing_cols = {row[1] for row in conn.execute("PRAGMA table_info(leads)")}
+    for col in ("body_type", "year", "exterior_color", "interior_color"):
+        if col not in existing_cols:
+            conn.execute(f"ALTER TABLE leads ADD COLUMN {col} TEXT")
     conn.commit()
     conn.close()
 
@@ -65,14 +73,18 @@ def save_lead(data):
     conn = sqlite3.connect(DB_PATH)
     cur = conn.execute(
         """
-        INSERT INTO leads (created_at, name, phone, country, model, budget, source, telegram_ok)
-        VALUES (datetime('now'), ?, ?, ?, ?, ?, ?, 0)
+        INSERT INTO leads (created_at, name, phone, country, model, body_type, year, exterior_color, interior_color, budget, source, telegram_ok)
+        VALUES (datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
         """,
         (
             str(data.get("name", "")).strip(),
             str(data.get("phone", "")).strip(),
             str(data.get("country", "")).strip(),
             str(data.get("model", "")).strip(),
+            str(data.get("bodyType", "")).strip(),
+            str(data.get("year", "")).strip(),
+            str(data.get("exteriorColor", "")).strip(),
+            str(data.get("interiorColor", "")).strip(),
             str(data.get("budget", "")).strip(),
             str(data.get("source", "")).strip(),
         ),
@@ -178,6 +190,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             ("name", "Имя"),
             ("country", "Направление"),
             ("model", "Марка/модель"),
+            ("bodyType", "Тип кузова"),
+            ("year", "Год выпуска"),
+            ("exteriorColor", "Цвет кузова"),
+            ("interiorColor", "Цвет салона"),
             ("budget", "Бюджет"),
             ("phone", "Телефон"),
             ("source", "Источник"),

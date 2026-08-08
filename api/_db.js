@@ -33,6 +33,15 @@ async function ensureSchema() {
       telegram_ok BOOLEAN NOT NULL DEFAULT false
     )
   `);
+  // Таблица уже существовала в проде до этих полей — CREATE TABLE IF NOT EXISTS
+  // их не добавит, поэтому доливаем недостающие колонки отдельно.
+  await pool.query(`
+    ALTER TABLE leads
+      ADD COLUMN IF NOT EXISTS body_type TEXT,
+      ADD COLUMN IF NOT EXISTS year TEXT,
+      ADD COLUMN IF NOT EXISTS exterior_color TEXT,
+      ADD COLUMN IF NOT EXISTS interior_color TEXT
+  `);
   initialized = true;
 }
 
