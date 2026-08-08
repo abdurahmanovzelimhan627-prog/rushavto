@@ -125,13 +125,7 @@ def send_via_bot(token, chat_id, text):
 
 def send_to_telegram(text):
     env = load_env()
-    results = [
-        send_via_bot(env.get("TELEGRAM_BOT_TOKEN"), env.get("TELEGRAM_CHAT_ID"), text),
-        send_via_bot(env.get("TELEGRAM_BOT_TOKEN_2"), env.get("TELEGRAM_CHAT_ID_2"), text),
-    ]
-    errors = [err for ok, err in results if not ok]
-    # Успех, если доставлено хотя бы одному получателю.
-    return any(ok for ok, _ in results), "; ".join(errors)
+    return send_via_bot(env.get("TELEGRAM_BOT_TOKEN_2"), env.get("TELEGRAM_CHAT_ID_2"), text)
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):

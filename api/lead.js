@@ -19,13 +19,7 @@ async function sendViaBot(token, chatId, text) {
 }
 
 async function sendToTelegram(text) {
-  const results = await Promise.all([
-    sendViaBot(process.env.TELEGRAM_BOT_TOKEN, process.env.TELEGRAM_CHAT_ID, text),
-    sendViaBot(process.env.TELEGRAM_BOT_TOKEN_2, process.env.TELEGRAM_CHAT_ID_2, text),
-  ]);
-  const errors = results.filter((r) => !r.ok).map((r) => r.error);
-  // Успех, если доставлено хотя бы одному получателю.
-  return { ok: results.some((r) => r.ok), error: errors.join('; ') };
+  return sendViaBot(process.env.TELEGRAM_BOT_TOKEN_2, process.env.TELEGRAM_CHAT_ID_2, text);
 }
 
 module.exports = async (req, res) => {
