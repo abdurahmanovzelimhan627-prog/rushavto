@@ -242,6 +242,10 @@
         <label>Телефон для связи
           <input type="tel" name="phone" id="qPhone" placeholder="+7 ...">
         </label>
+        <label class="quote-consent">
+          <input type="checkbox" name="consent" id="qConsent" required>
+          <span>Даю согласие на <a href="consent.html" target="_blank" rel="noopener">обработку персональных данных</a> в соответствии с <a href="privacy.html" target="_blank" rel="noopener">Политикой обработки персональных данных</a></span>
+        </label>
         <button type="submit" class="btn btn-solid btn-lg btn-block" id="qSubmit">Отправить заявку</button>
         <p class="quote-hint" id="qStatus">Заявка уйдёт менеджеру в Telegram.</p>
       </form>
@@ -338,9 +342,20 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <span>© <span id="year"></span> RUSHAUTO. Подбор и доставка автомобилей из Китая, Кореи, Европы и Дубая.</span>
+    <span class="footer-legal-links">
+      <a href="privacy.html">Политика обработки персональных данных</a>
+      <a href="consent.html">Согласие на обработку данных</a>
+    </span>
     <a href="#top">Наверх ↑</a>
   </div>
 </footer>
+
+<div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite">
+  <div class="wrap cookie-banner-inner">
+    <p>Мы используем cookie, IP-адрес и (при наличии разрешения браузера) данные геолокации для работы формы заявки, защиты от спама и в будущем — для аналитики. До вашего согласия сторонние счётчики (например, Яндекс.Метрика, Google Analytics) не запускаются. Подробнее — в <a href="privacy.html">Политике обработки персональных данных</a>.</p>
+    <button type="button" class="btn btn-solid" id="cookieAccept">Принять</button>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
