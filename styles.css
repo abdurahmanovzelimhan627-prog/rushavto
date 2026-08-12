@@ -1,4 +1,47 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap');
+@font-face{
+  font-family:'Archivo Black';font-style:normal;font-weight:400;font-display:swap;
+  src:url('assets/fonts/archivo-black-latin.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;
+  src:url('assets/fonts/inter-cyrillic.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;
+  src:url('assets/fonts/inter-latin.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;
+  src:url('assets/fonts/inter-cyrillic.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:500;font-display:swap;
+  src:url('assets/fonts/inter-latin.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;
+  src:url('assets/fonts/inter-cyrillic.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;
+  src:url('assets/fonts/inter-latin.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;
+  src:url('assets/fonts/inter-cyrillic.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;
+  src:url('assets/fonts/inter-latin.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:800;font-display:swap;
+  src:url('assets/fonts/inter-cyrillic.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:800;font-display:swap;
+  src:url('assets/fonts/inter-latin.woff2') format('woff2');
+}
 
 :root{
   --bg: #0b0a09;
