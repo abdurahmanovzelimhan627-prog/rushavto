@@ -55,6 +55,13 @@ const quoteForm = document.getElementById('quoteForm');
 if (quoteForm) {
   const qSubmit = document.getElementById('qSubmit');
   const qStatus = document.getElementById('qStatus');
+  const qConsent = document.getElementById('qConsent');
+
+  // Кнопка отправки заблокирована, пока не отмечен чекбокс согласия —
+  // блокировка отправки без согласия обязательна, поле не предзаполнено.
+  qConsent.addEventListener('change', () => {
+    qSubmit.disabled = !qConsent.checked;
+  });
 
   quoteForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -88,7 +95,9 @@ if (quoteForm) {
     } catch (err) {
       qStatus.textContent = 'Сервер недоступен. Попробуйте ещё раз или напишите нам в WhatsApp.';
     } finally {
-      qSubmit.disabled = false;
+      // После reset() чекбокс снова снят — кнопка должна остаться
+      // заблокированной, а не просто разблокироваться безусловно.
+      qSubmit.disabled = !qConsent.checked;
     }
   });
 }
