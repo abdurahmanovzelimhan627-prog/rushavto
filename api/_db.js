@@ -43,6 +43,15 @@ async function ensureSchema() {
       ADD COLUMN IF NOT EXISTS interior_color TEXT,
       ADD COLUMN IF NOT EXISTS ip TEXT
   `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS bot_consents (
+      chat_id BIGINT PRIMARY KEY,
+      username TEXT,
+      first_name TEXT,
+      rules_shown_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      consented_at TIMESTAMPTZ
+    )
+  `);
   initialized = true;
 }
 
